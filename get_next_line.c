@@ -55,7 +55,8 @@ char	*get_next_line(int fd)
 
 	if (fd <= 0)
 		return (NULL);
-	strr = NULL;
+	strr = (char *)malloc(sizeof(char) * 1);
+	strr[0] = '\0';
 	adds(strr, str);
 	while (!strchr(strr, '\n'))
 	{
