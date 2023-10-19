@@ -6,7 +6,7 @@
 /*   By: nbiron <nbiron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:45:13 by nbiron            #+#    #+#             */
-/*   Updated: 2023/10/19 14:11:05 by nbiron           ###   ########.fr       */
+/*   Updated: 2023/10/19 16:43:22 by nbiron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #  define BUFFER_SIZE 10
 # endif
 
-char 			*get_next_line(int fd);
+char			*get_next_line(int fd);
 char			*to_static(char str[BUFFER_SIZE], char *strr);
 char			*adds(char *dest, char *src, int src_size);
 size_t			ft_strlcat(char *dst, const char *src, size_t size);

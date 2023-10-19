@@ -16,5 +16,6 @@ int	main()
 		free(str);
 		str = get_next_line(fd);
 	}
+	free(str);
 	close(fd);	
 }
