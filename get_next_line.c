@@ -6,7 +6,7 @@
 /*   By: nbiron <nbiron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:45:16 by nbiron            #+#    #+#             */
-/*   Updated: 2023/10/18 17:09:59 by nbiron           ###   ########.fr       */
+/*   Updated: 2023/10/19 14:10:49 by nbiron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,28 @@ char	*to_static(char str[BUFFER_SIZE], char *strr)
 	i = 0;
 	if (ft_strlen(strr) == 0)
 		return(NULL);
-	while(strr && strr[i] != '\n')
+	while(strr && strr[i] != '\n' && strr[i] != '\0')
 		i++;
 	value = (char *)malloc(sizeof(char) * (i++));
-	while (strr && strr[i])
+	if (strr[i] != '\0')
 	{
-		str[a] = strr[i];
-		i++;
-		a++;
+		while (strr && strr[i])
+		{
+			str[a] = strr[i];
+			i++;
+			a++;
+		}
 	}
 	while (str[a])
 		str[a++] = '\0';
 	i = 0;
-	while(strr && strr[i] != '\n')
+	while(strr && strr[i] != '\n' && strr[i] != '\0')
 	{
 		value[i] = strr[i];
 		i++;
 	}
+	if (strr[i] == '\n')
+		value[i++] = '\n';
 	value[i] = '\0';
 	if (strr)
 		free(strr);
@@ -50,19 +55,21 @@ char	*to_static(char str[BUFFER_SIZE], char *strr)
 char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE];
-	static char str[BUFFER_SIZE];
+	static char static_str[BUFFER_SIZE];
 	char		*strr;
+	int			readsize;
 
+	readsize = 1;
 	if (fd <= 0)
 		return (NULL);
-	strr = NULL;
-	adds(strr, str);
-	while (!strchr(strr, '\n'))
+	strr = adds(NULL, static_str, BUFFER_SIZE);
+	while (!strchr(strr, '\n') && readsize)
 	{
-		read(fd, buffer, BUFFER_SIZE);
-		strr = adds(strr, buffer);
-		printf("%s", strr);
+		readsize = read(fd, buffer, BUFFER_SIZE);
+		if (readsize > 0)
+			strr = adds(strr, buffer, readsize);
 	}
-	strr = to_static(str, strr);
+	strr = to_static(static_str, strr);
+	//printf("|||\nstatic %s \n||||", static_str);
 	return(strr);
 }

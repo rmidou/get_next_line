@@ -6,29 +6,53 @@
 /*   By: nbiron <nbiron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:45:18 by nbiron            #+#    #+#             */
-/*   Updated: 2023/10/18 17:07:35 by nbiron           ###   ########.fr       */
+/*   Updated: 2023/10/19 13:52:09 by nbiron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
-char	*adds(char *str, char *c)
+void	*ft_memcpy(void *dest, const void *src, size_t n, int value)
 {
-	int		y;
-	char	*strr;
+	size_t	i;
+	char	*d;
+	char	*s;
 
-	y = 0;
-	while (str && str[y])
-		y++;
-	strr = (char *)malloc(sizeof(char) * (y + ft_strlen(c) + 1));
-	strr[y + ft_strlen(c)] = '\0';
-	ft_strlcpy(strr, str, y + 1);
-	ft_strlcat(strr, c, (ft_strlen(strr) + ft_strlen(c) + 1));
-	//printf("%s", strr);
-	if (str != NULL)
-		free(str);
-	return (strr);
+	i = 0;
+	d = (char *)dest;
+	s = (char *)src;
+	if (!dest && !src)
+		return (NULL);
+	while (i < n)
+	{
+		if (value >= 0)
+			d[i] = value;
+		else
+			d[i] = s[i];
+		i++;
+	}
+	return (dest);
+}
+
+char	*adds(char *dest, char *src, int src_size)
+{
+	char	*str;
+	size_t	len1;
+
+	len1 = 0;
+	if (dest)
+		len1 = ft_strlen(dest);
+	str = (char *)malloc((len1 + src_size + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	*str = '\0';
+	if (dest)
+		ft_memcpy(str, dest, len1, -1);
+	if (dest)
+		free(dest);
+	ft_memcpy(str + len1, src, src_size, -1);
+	str[len1 + src_size] = '\0';
+	return (str);
 }
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
