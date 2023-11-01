@@ -6,7 +6,7 @@
 /*   By: nbiron <nbiron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:45:18 by nbiron            #+#    #+#             */
-/*   Updated: 2023/10/19 16:42:43 by nbiron           ###   ########.fr       */
+/*   Updated: 2023/11/01 13:17:18 by nbiron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	*ft_memcpy(void *dest, const void *src, size_t n, int value)
 	i = 0;
 	d = (char *)dest;
 	s = (char *)src;
-	if (!dest && !src)
+	if ((!dest && !src) || !src)
 		return (NULL);
 	while (i < n)
 	{
@@ -50,7 +50,8 @@ char	*adds(char *dest, char *src, int src_size)
 		ft_memcpy(str, dest, len1, -1);
 	if (dest)
 		free(dest);
-	ft_memcpy(str + len1, src, src_size, -1);
+	if (src_size != 0)
+		ft_memcpy(str + len1, src, src_size, -1);
 	str[len1 + src_size] = '\0';
 	return (str);
 }

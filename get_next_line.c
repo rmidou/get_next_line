@@ -6,7 +6,7 @@
 /*   By: nbiron <nbiron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:45:16 by nbiron            #+#    #+#             */
-/*   Updated: 2023/10/19 16:49:31 by nbiron           ###   ########.fr       */
+/*   Updated: 2023/11/01 13:32:39 by nbiron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ char	*to_static2(char str[BUFFER_SIZE], char *strr, int a, char *value)
 		i++;
 	}
 	if (strr[i] == '\n')
-		value[i++] = '\n';
+	{
+		value[i] = '\n';
+		i++;
+	}
 	value[i] = '\0';
 	if (strr)
 		free(strr);
@@ -45,7 +48,8 @@ char	*to_static(char str[BUFFER_SIZE], char *strr)
 	while (strr && strr[i] != '\n' && strr[i])
 		i++;
 	value = (char *)malloc(sizeof(char) * (i + 2));
-	i++;
+	if (strr[i])
+		i++;
 	if (strr[i])
 	{
 		while (strr && strr[i])
@@ -66,16 +70,14 @@ char	*get_next_line(int fd)
 	int			readsize;
 
 	readsize = 1;
-	if (fd <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0)
 		return (NULL);
 	strr = adds(NULL, static_str, BUFFER_SIZE);
-	while (!ft_strchr(strr, '\n') && readsize)
+	while (!ft_strchr(strr, '\n') && readsize > 0 && strr)
 	{
 		readsize = read(fd, buffer, BUFFER_SIZE);
-		if (readsize > 0)
-			strr = adds(strr, buffer, readsize);
+		strr = adds(strr, buffer, readsize);
 	}
-	if (strr)
-		strr = to_static(static_str, strr);
-	return (strr);
+	//strr = to_static(static_str, strr);
+	return (to_static(static_str, strr));
 }
