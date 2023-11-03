@@ -6,78 +6,101 @@
 /*   By: nbiron <nbiron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:45:16 by nbiron            #+#    #+#             */
-/*   Updated: 2023/11/01 13:32:39 by nbiron           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:08:57 by nbiron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*to_static2(char str[BUFFER_SIZE], char *strr, int a, char *value)
-{
-	int	i;
-
-	i = 0;
-	while (str[a])
-		str[a++] = '\0';
-	while (strr && strr[i] && strr[i] != '\n')
-	{
-		value[i] = strr[i];
-		i++;
-	}
-	if (strr[i] == '\n')
-	{
-		value[i] = '\n';
-		i++;
-	}
-	value[i] = '\0';
-	if (strr)
-		free(strr);
-	return (value);
-}
-
-char	*to_static(char str[BUFFER_SIZE], char *strr)
+char	*ft_line(char *static_str)
 {
 	int		i;
-	int		a;
-	char	*value;
+	char	*s;
 
-	a = 0;
 	i = 0;
-	if (ft_strlen(strr) == 0)
+	if (!static_str[i])
 		return (NULL);
-	while (strr && strr[i] != '\n' && strr[i])
+	while (static_str[i] && static_str[i] != '\n')
 		i++;
-	value = (char *)malloc(sizeof(char) * (i + 2));
-	if (strr[i])
-		i++;
-	if (strr[i])
+	s = (char *)malloc(sizeof(char) * (i + 2));
+	if (!s)
+		return (NULL);
+	i = 0;
+	while (static_str[i] && static_str[i] != '\n')
 	{
-		while (strr && strr[i])
-		{
-			str[a] = strr[i];
-			i++;
-			a++;
-		}
+		s[i] = static_str[i];
+		i++;
 	}
-	return (to_static2(str, strr, a, value));
+	if (static_str[i] == '\n')
+	{
+		s[i] = static_str[i];
+		i++;
+	}
+	s[i] = '\0';
+	return (s);
+}
+
+char	*ft_save(char *static_str)
+{
+	int		i;
+	int		c;
+	char	*s;
+
+	i = 0;
+	while (static_str[i] && static_str[i] != '\n')
+		i++;
+	if (!static_str[i])
+	{
+		free(static_str);
+		return (NULL);
+	}
+	s = (char *)malloc(sizeof(char) * (ft_strlen(static_str) - i + 1));
+	if (!s)
+		return (NULL);
+	i++;
+	c = 0;
+	while (static_str[i])
+		s[c++] = static_str[i++];
+	s[c] = '\0';
+	free(static_str);
+	return (s);
+}
+
+char	*ft_read(int fd, char *save)
+{
+	char	*buff;
+	int		readsize;
+
+	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buff)
+		return (NULL);
+	readsize = 1;
+	while (!ft_strchr(save, '\n') && readsize != 0)
+	{
+		readsize = read(fd, buff, BUFFER_SIZE);
+		if (readsize == -1)
+		{
+			free(buff);
+			return (NULL);
+		}
+		buff[readsize] = '\0';
+		save = ft_strjoin(save, buff);
+	}
+	free(buff);
+	return (save);
 }
 
 char	*get_next_line(int fd)
 {
-	char		buffer[BUFFER_SIZE];
-	static char	static_str[BUFFER_SIZE];
-	char		*strr;
-	int			readsize;
+	char		*line;
+	static char	*static_str;
 
-	readsize = 1;
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, buffer, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	strr = adds(NULL, static_str, BUFFER_SIZE);
-	while (!ft_strchr(strr, '\n') && readsize > 0 && strr)
-	{
-		readsize = read(fd, buffer, BUFFER_SIZE);
-		strr = adds(strr, buffer, readsize);
-	}
-	//strr = to_static(static_str, strr);
-	return (to_static(static_str, strr));
+	static_str = ft_read(fd, static_str);
+	if (!static_str)
+		return (NULL);
+	line = ft_line(static_str);
+	static_str = ft_save(static_str);
+	return (line);
 }

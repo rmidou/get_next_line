@@ -6,74 +6,66 @@
 /*   By: nbiron <nbiron@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:45:18 by nbiron            #+#    #+#             */
-/*   Updated: 2023/11/01 13:17:18 by nbiron           ###   ########.fr       */
+/*   Updated: 2023/11/03 08:50:47 by nbiron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static void	*ft_memcpy(void *dest, const void *src, size_t n, int value)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	i;
-	char	*d;
-	char	*s;
-
-	i = 0;
-	d = (char *)dest;
-	s = (char *)src;
-	if ((!dest && !src) || !src)
-		return (NULL);
-	while (i < n)
-	{
-		if (value >= 0)
-			d[i] = value;
-		else
-			d[i] = s[i];
-		i++;
-	}
-	return (dest);
-}
-
-char	*adds(char *dest, char *src, int src_size)
-{
+	size_t	c;
 	char	*str;
-	size_t	len1;
 
-	len1 = 0;
-	if (dest)
-		len1 = ft_strlen(dest);
-	str = (char *)malloc((len1 + src_size + 1) * sizeof(char));
-	if (!str)
+	if (!s1)
+	{
+		s1 = (char *)malloc(1 * sizeof(char));
+		s1[0] = '\0';
+	}
+	if (!s1 || !s2)
 		return (NULL);
-	*str = '\0';
-	if (dest)
-		ft_memcpy(str, dest, len1, -1);
-	if (dest)
-		free(dest);
-	if (src_size != 0)
-		ft_memcpy(str + len1, src, src_size, -1);
-	str[len1 + src_size] = '\0';
+	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (str == NULL)
+		return (NULL);
+	i = -1;
+	c = 0;
+	if (s1)
+		while (s1[++i] != '\0')
+			str[i] = s1[i];
+	while (s2[c] != '\0')
+		str[i++] = s2[c++];
+	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
+	free(s1);
 	return (str);
 }
 
-int	ft_strlen(const char *str)
+size_t	ft_strlen(char *str)
 {
-	int	i;
+	size_t	c;
 
-	i = 0;
-	while (str && str[i])
-		i++;
-	return (i);
+	c = 0;
+	if (!str)
+		return (0);
+	while (str[c] != '\0')
+		c++;
+	return (c);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(char *s, int c)
 {
 	int	i;
 
 	i = 0;
-	while ((unsigned char)s[i] != (unsigned char)c && s[i])
+	if (!s)
+		return (0);
+	if (c == '\0')
+		return ((char *)&s[ft_strlen(s)]);
+	while (s[i] != '\0')
+	{
+		if (s[i] == (char) c)
+			return ((char *)&s[i]);
 		i++;
-	if (s[i] || !c)
-		return ((char *)s + i);
-	return (NULL);
+	}
+	return (0);
 }

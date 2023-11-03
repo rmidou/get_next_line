@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbiron <nbiron@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rmidou <rmidou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:45:13 by nbiron            #+#    #+#             */
-/*   Updated: 2023/10/19 16:43:22 by nbiron           ###   ########.fr       */
+/*   Updated: 2023/11/02 17:19:18 by rmidou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,9 @@
 #  define BUFFER_SIZE 10
 # endif
 
+size_t			ft_strlen(char *str);
+char			*ft_strchr(char *s, int c);
+char			*ft_strjoin(char *s1, char *s2);
 char			*get_next_line(int fd);
-char			*to_static(char str[BUFFER_SIZE], char *strr);
-char			*adds(char *dest, char *src, int src_size);
-size_t			ft_strlcat(char *dst, const char *src, size_t size);
-unsigned int	ft_strlcpy(char *dest, char *src, unsigned int size);
-int				ft_strlen(const char *str);
-char			*ft_strchr(const char *s, int c);
 
 #endif
